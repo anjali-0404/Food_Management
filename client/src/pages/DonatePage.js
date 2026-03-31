@@ -41,15 +41,62 @@ const DonatePage = () => {
     fontWeight: 600, fontSize: '0.9rem', color: '#374151'
   };
 
+  const validateStep = (currentStep = step) => {
+    if (currentStep === 0) {
+      if (!form.title.trim()) return 'Food title is required';
+      if (!form.description.trim()) return 'Description is required';
+      return '';
+    }
+
+    if (currentStep === 1) {
+      if (!form.quantity.amount || Number(form.quantity.amount) <= 0) {
+        return 'Quantity amount must be greater than 0';
+      }
+      if (!form.servings || Number(form.servings) <= 0) {
+        return 'Estimated servings must be greater than 0';
+      }
+      if (!form.expiryTime) return 'Best before / expiry time is required';
+
+      const expiry = new Date(form.expiryTime);
+      if (Number.isNaN(expiry.getTime())) return 'Please select a valid expiry time';
+      if (expiry.getTime() <= Date.now()) return 'Expiry time must be in the future';
+      return '';
+    }
+
+    if (currentStep === 2 && !form.pickupLocation) {
+      return 'Please select a pickup location with GPS';
+    }
+
+    return '';
+  };
+
+  const handleContinue = () => {
+    const validationError = validateStep(step);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    setError('');
+    setStep(s => s + 1);
+  };
+
   const handleSubmit = async () => {
-    if (!form.pickupLocation) return setError('Please select a pickup location with GPS');
+    const validationError = validateStep(3);
+    if (validationError) return setError(validationError);
+
+    const expiry = new Date(form.expiryTime);
+    if (Number.isNaN(expiry.getTime())) {
+      return setError('Please select a valid expiry time');
+    }
+
     setLoading(true);
     setError('');
     try {
       await createDonation({
         ...form,
         quantity: { amount: Number(form.quantity.amount), unit: form.quantity.unit },
-        servings: Number(form.servings)
+        servings: Number(form.servings),
+        expiryTime: expiry.toISOString()
       });
       setSuccess(true);
       setTimeout(() => navigate('/dashboard'), 2500);
@@ -380,7 +427,7 @@ const DonatePage = () => {
             }}>← Back</button>
 
             {step < 3 ? (
-              <button onClick={() => setStep(s => s + 1)} style={{
+              <button onClick={handleContinue} style={{
                 padding: '14px 32px', borderRadius: '12px', border: 'none',
                 background: 'linear-gradient(135deg,#FF6B35,#FFC947)',
                 color: '#fff', fontWeight: 700, cursor: 'pointer',

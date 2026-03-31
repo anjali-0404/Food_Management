@@ -77,10 +77,36 @@ router.post('/', protect, authorize('donor', 'admin'), async (req, res) => {
       pickupLocation, images
     } = req.body;
 
+    if (!title || !description || !foodType || !quantity || !pickupLocation) {
+      return res.status(400).json({ message: 'Missing required donation fields' });
+    }
+
+    if (!quantity.amount || Number(quantity.amount) <= 0) {
+      return res.status(400).json({ message: 'Quantity amount must be greater than 0' });
+    }
+
+    if (!servings || Number(servings) <= 0) {
+      return res.status(400).json({ message: 'Servings must be greater than 0' });
+    }
+
+    const expiryInput = expiryTime || req.body.expiryDate;
+    if (!expiryInput) {
+      return res.status(400).json({ message: 'expiryTime is required' });
+    }
+
+    const parsedExpiryTime = new Date(expiryInput);
+    if (Number.isNaN(parsedExpiryTime.getTime())) {
+      return res.status(400).json({ message: 'Invalid expiryTime format' });
+    }
+
+    if (parsedExpiryTime.getTime() <= Date.now()) {
+      return res.status(400).json({ message: 'expiryTime must be in the future' });
+    }
+
     const donation = await Donation.create({
       donor: req.user._id,
       title, description, foodType, category,
-      quantity, servings, expiryTime,
+      quantity, servings, expiryTime: parsedExpiryTime,
       urgency: urgency || 'medium',
       pickupLocation,
       images: images || [],

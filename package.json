@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "FoodBridge - NGO Food Donation Platform (MERN Stack)",
   "scripts": {
-    "server":    "cd server && npm start",
-    "client":    "cd client && npm start",
-    "dev":       "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm start",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install"
   },
   "devDependencies": {
     "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "mongoose": "^9.3.3"
   }
 }

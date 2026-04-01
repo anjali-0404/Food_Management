@@ -269,12 +269,12 @@ const MapPage = () => {
                       <div style={{ fontSize: '0.78rem', color: '#6B7280', marginBottom: '10px' }}>
                         by {d.donor?.name} • {d.urgency} urgency
                       </div>
-                      <a href={`/donations/${d._id}`} style={{
+                      <Link to={`/donations/${d._id}`} style={{
                         display: 'block', padding: '8px', textAlign: 'center',
                         borderRadius: '8px', textDecoration: 'none',
                         background: 'linear-gradient(135deg,#FF6B35,#FFC947)',
                         color: '#fff', fontWeight: 700, fontSize: '0.85rem'
-                      }}>View & Accept →</a>
+                      }}>View & Accept →</Link>
                     </div>
                   </Popup>
                 </Marker>

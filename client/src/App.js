@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import { LoginPage, RegisterPage } from './pages/AuthPages';
 import DonationsPage from './pages/DonationsPage';
+import DonationDetailsPage from './pages/DonationDetailsPage';
 import DonatePage from './pages/DonatePage';
 import MapPage from './pages/MapPage';
 import { DashboardPage, LeaderboardPage } from './pages/DashboardPages';
@@ -36,6 +37,7 @@ function App() {
           <Route path="/login"       element={<LoginPage />} />
           <Route path="/register"    element={<RegisterPage />} />
           <Route path="/donations"   element={<DonationsPage />} />
+          <Route path="/donations/:id" element={<DonationDetailsPage />} />
           <Route path="/map"         element={<MapPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/donate"      element={<PrivateRoute><DonatePage /></PrivateRoute>} />

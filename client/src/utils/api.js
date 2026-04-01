@@ -1,7 +1,21 @@
 import axios from 'axios';
 
+const resolveApiBaseUrl = () => {
+  const configured = process.env.REACT_APP_API_URL;
+
+  if (!configured) return '/api';
+
+  // If env var is a plain host URL, route requests through /api by default.
+  const trimmed = configured.replace(/\/$/, '');
+  if (/^https?:\/\//i.test(trimmed) && !/\/api(?:$|\/)/i.test(trimmed)) {
+    return `${trimmed}/api`;
+  }
+
+  return trimmed;
+};
+
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || '/api'
+  baseURL: resolveApiBaseUrl()
 });
 
 // Attach token

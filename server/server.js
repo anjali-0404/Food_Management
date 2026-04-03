@@ -42,21 +42,14 @@ const connectDB = async () => {
 };
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
-// Support both the current /api prefix and older root-relative clients.
-const authRoutes = require('./routes/auth');
-const donationRoutes = require('./routes/donations');
-const userRoutes = require('./routes/users');
-const ngoRoutes = require('./routes/ngos');
-const statsRoutes = require('./routes/stats');
-
-app.use(['/api/auth', '/auth'], authRoutes);
-app.use(['/api/donations', '/donations'], donationRoutes);
-app.use(['/api/users', '/users'], userRoutes);
-app.use(['/api/ngos', '/ngos'], ngoRoutes);
-app.use(['/api/stats', '/stats'], statsRoutes);
+app.use('/api/auth',      require('./routes/auth'));
+app.use('/api/donations', require('./routes/donations'));
+app.use('/api/users',     require('./routes/users'));
+app.use('/api/ngos',      require('./routes/ngos'));
+app.use('/api/stats',     require('./routes/stats'));
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
-app.get(['/api/health', '/health'], (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
     message: '🍱 FoodBridge Server is Running',

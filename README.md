@@ -5,7 +5,6 @@
 A full-stack **MERN (MongoDB, Express, React, Node.js)** application that enables donors to list surplus food and NGOs to accept donations — all powered by accurate GPS location tracking.
 
 ---
-
 ## ✨ Features
 
 | Feature | Description |
